@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    container_name: novamart_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - PROJECT_NAME=NovaMart E-Commerce & Inventory API
+      - SECRET_KEY=production_secret_key_intermediate_shadowfox_2026
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=1440
+      - DATABASE_URL=sqlite:///./novamart.db
+      - CORS_ORIGINS=*
+    volumes:
+      - api_data:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  api_data:
